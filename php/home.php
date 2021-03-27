@@ -1,18 +1,19 @@
 <?php 
 session_start();
-require("db.php");
+require("db.php"); 
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
 ?>
 <?php
-if(isset($_POST['ajout_fiche_frais_btn'])){ $_SESSION['ajout_fiche_frais_btn'] = $_POST['ajout_fiche_frais_btn']; require("controll_saisie.php"); $_SESSION['activeRadio'] = 3;}
+if(isset($_POST['ajout_fiche_frais_btn'])){require("controll_saisie.php");$_SESSION['activeRadio'] = 3;}
 if(isset($_POST['saisie_date_fiche_frais'])){ $_SESSION['saisie_date_fiche_frais'] = $_POST['saisie_date_fiche_frais'];}
 if(isset($_POST['saisie_qte_etp'])){ $_SESSION['saisie_qte_etp'] = $_POST['saisie_qte_etp']; }
 if(isset($_POST['saisie_nb_km'])){ $_SESSION['saisie_nb_km'] = $_POST['saisie_nb_km']; }
 if(isset($_POST['saisie_nb_nui'])){ $_SESSION['saisie_nb_nui'] = $_POST['saisie_nb_nui']; }
 if(isset($_POST['saisie_nb_repas'])){ $_SESSION['saisie_nb_repas'] = $_POST['saisie_nb_repas']; }
-if(isset($_POST['saisie_libelle_txt'])){ $_SESSION['saisie_libelle_txt'] = $_POST['saisie_libelle_txt']; }
-if(isset($_POST['saisie_montant'])){ $_SESSION['saisie_montant'] = $_POST['saisie_montant']; }
+if(isset($_POST['saisie_libelle_txt'])){ $_SESSION['saisie_libelle_txt'] = $_POST['saisie_libelle_txt']; }else{$_SESSION['saisie_libelle_txt'] = null;}
+if(isset($_POST['saisie_montant'])){ $_SESSION['saisie_montant'] = $_POST['saisie_montant']; }else{$_SESSION['saisie_montant'] = null;}
+if(isset($_POST['saisie_nb_justificatifs'])){ $_SESSION['saisie_nb_justificatifs'] = $_POST['saisie_nb_justificatifs']; }
 
 $msge = "";
 
@@ -142,7 +143,7 @@ if(isset($_POST["affiche_fiche_frais"])){
   <input name="nav" type="radio" class="nav home-radio" id="home" <?php if($_SESSION['activeRadio'] == 1){echo "checked";} ?>/>
   <div class="page home-page">
     <div class="page-contents">
-      <h1>Bienvenue 
+      <h1>Bienvenue
       <?php 
       if(isset($_SESSION['userPrenom'])){
         echo $_SESSION['userPrenom'];
@@ -202,7 +203,7 @@ if(isset($_POST["affiche_fiche_frais"])){
     <div class="page-contents">
     
     <form action="" method="post">
-    <?php if(isset($_SESSION['msg_saiie'])){echo $_SESSION['msg_saiie']."<br><br><br>";} ?>
+    <?php if(isset($_SESSION['msg_saiie'])){echo $_SESSION['msg_saiie']."<br><br><br>";}?>
     <div class="corpsForm">
           <input type="hidden" name="etape" value="validerAjoutLigneHF" />
           <fieldset>
@@ -210,23 +211,27 @@ if(isset($_POST["affiche_fiche_frais"])){
             </legend>
             <p>
               <label for="date_date">* Date : </label>
-              <input type="date" id="txtDateHF" name="saisie_date_fiche_frais" size="12" maxlength="10" />
+              <input type="date" id="txtDateHF" name="saisie_date_fiche_frais" size="12" maxlength="10" required/>
             </p>
             <p>
               <label for="qte_etp">* Qte. Etape : </label>
-              <input type="text" id="txtMontantHF" name="saisie_qte_etp" size="12" maxlength="10" />
+              <input type="text" id="txtMontantHF" name="saisie_qte_etp" size="12" maxlength="10" required/>
             </p>
             <p>
               <label for="qte_km">* Nb. KM : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_km" size="12" maxlength="10" />
+              <input type="text" id="txtMontantHF" name="saisie_nb_km" size="12" maxlength="10" required/>
             </p>
             <p>
               <label for="qte_nui">* Nb. Nuits : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_nui" size="12" maxlength="10" />
+              <input type="text" id="txtMontantHF" name="saisie_nb_nui" size="12" maxlength="10"required/>
             </p>
             <p>
               <label for="qte_rep">* Nb. Repas : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_repas" size="12" maxlength="10" />
+              <input type="text" id="txtMontantHF" name="saisie_nb_repas" size="12" maxlength="10"required/>
+            </p>
+            <p>
+              <label for="qte_rep">Nb. Justificatifs : </label>
+              <input type="text" id="txtMontantHF" name="saisie_nb_justificatifs" size="12" maxlength="10" required/>
             </p>
           </fieldset>
       </div>
