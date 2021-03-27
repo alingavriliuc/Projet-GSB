@@ -1,11 +1,21 @@
 <?php 
 session_start();
-include("db.php");
+require("db.php");
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
 ?>
 <?php
+if(isset($_POST['ajout_fiche_frais_btn'])){ $_SESSION['ajout_fiche_frais_btn'] = $_POST['ajout_fiche_frais_btn']; require("controll_saisie.php"); $_SESSION['activeRadio'] = 3;}
+if(isset($_POST['saisie_date_fiche_frais'])){ $_SESSION['saisie_date_fiche_frais'] = $_POST['saisie_date_fiche_frais'];}
+if(isset($_POST['saisie_qte_etp'])){ $_SESSION['saisie_qte_etp'] = $_POST['saisie_qte_etp']; }
+if(isset($_POST['saisie_nb_km'])){ $_SESSION['saisie_nb_km'] = $_POST['saisie_nb_km']; }
+if(isset($_POST['saisie_nb_nui'])){ $_SESSION['saisie_nb_nui'] = $_POST['saisie_nb_nui']; }
+if(isset($_POST['saisie_nb_repas'])){ $_SESSION['saisie_nb_repas'] = $_POST['saisie_nb_repas']; }
+if(isset($_POST['saisie_libelle_txt'])){ $_SESSION['saisie_libelle_txt'] = $_POST['saisie_libelle_txt']; }
+if(isset($_POST['saisie_montant'])){ $_SESSION['saisie_montant'] = $_POST['saisie_montant']; }
+
 $msge = "";
+
 if(isset($_POST["affiche_fiche_frais"])){
   $date_fiche_frais = $_POST["date_fiche_frais"];
   $etpID = "ETP";
@@ -164,6 +174,7 @@ if(isset($_POST["affiche_fiche_frais"])){
           <th>Frais Km</th>
           <th>frais nuitée</th>
           <th>Frais repas</th>
+          <th>Hors forfait</th>
           <th>Total</th>
           <th>Etat</th>
         </tr>
@@ -189,9 +200,59 @@ if(isset($_POST["affiche_fiche_frais"])){
   <input name="nav" type="radio" class="saisir-radio" id="saisir" <?php if($_SESSION['activeRadio'] == 3){echo "checked";} ?> />
   <div class="page saisir-page">
     <div class="page-contents">
-      <h1>Contact</h1>
-      <p>Eaque accusamus magnam error unde nam, atque provident omnis fugiat quam necessitatibus vel nulla sed quibusdam fuga veritatis assumenda alias quidem asperiores?</p>
-      <p><a href="#">Get in touch</a></p>
+    
+    <form action="" method="post">
+    <?php if(isset($_SESSION['msg_saiie'])){echo $_SESSION['msg_saiie']."<br><br><br>";} ?>
+    <div class="corpsForm">
+          <input type="hidden" name="etape" value="validerAjoutLigneHF" />
+          <fieldset>
+            <legend>Nouvelle fiche
+            </legend>
+            <p>
+              <label for="date_date">* Date : </label>
+              <input type="date" id="txtDateHF" name="saisie_date_fiche_frais" size="12" maxlength="10" />
+            </p>
+            <p>
+              <label for="qte_etp">* Qte. Etape : </label>
+              <input type="text" id="txtMontantHF" name="saisie_qte_etp" size="12" maxlength="10" />
+            </p>
+            <p>
+              <label for="qte_km">* Nb. KM : </label>
+              <input type="text" id="txtMontantHF" name="saisie_nb_km" size="12" maxlength="10" />
+            </p>
+            <p>
+              <label for="qte_nui">* Nb. Nuits : </label>
+              <input type="text" id="txtMontantHF" name="saisie_nb_nui" size="12" maxlength="10" />
+            </p>
+            <p>
+              <label for="qte_rep">* Nb. Repas : </label>
+              <input type="text" id="txtMontantHF" name="saisie_nb_repas" size="12" maxlength="10" />
+            </p>
+          </fieldset>
+      </div>
+     <br>
+      <div class="corpsForm">
+          <input type="hidden" name="etape" value="validerAjoutLigneHF" />
+          <fieldset>
+            <legend>Nouvel élément hors forfait
+            </legend>
+            <p>
+              <label for="txtLibelleHF">Libellé : </label>
+              <input type="text" id="txtLibelleHF" name="saisie_libelle_txt" size="70" maxlength="100"/>
+            </p>
+            <p>
+              <label for="txtMontantHF">Montant : </label>
+              <input type="text" id="txtMontantHF" name="saisie_montant" size="12" maxlength="10"/>
+            </p>
+          </fieldset>
+      </div>
+      <div class="piedForm">
+      <p>
+        <input id="ajouter" type="submit" value="Ajouter" size="20" name="ajout_fiche_frais_btn"/>
+      </p>
+      </div>
+    </form>
+
     </div>
   </div>
   <label class="nav" for="saisir">
