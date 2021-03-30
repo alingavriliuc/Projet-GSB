@@ -7,6 +7,7 @@ $msg = "";
 if(isset($_POST['submitButton'])) {
   $username = trim($_POST['username']);
   $password = trim($_POST['password']);
+  $user_visiteur = "visiteur";
   if($username != "" && $password != "") {
     try {
       $query = "select * from users where username=:username and password=:password";
@@ -24,7 +25,10 @@ if(isset($_POST['submitButton'])) {
 		$_SESSION['userPrenom'] =  ucfirst($row['prenom']);
 		$_SESSION['userAdresse'] = $row['adresse'];
 		$_SESSION['userCP'] = $row['cp'];
-		header("Location: ./php/home.php");
+		$_SESSION['userFonction'] = $row['fonction'];
+		if(isset($_SESSION['userFonction'])){
+			if($_SESSION['userFonction'] === "visiteur"){header("Location: ./php/home.php");}else{$msg = $_SESSION['userFonction'];}
+		}
       } else {
         $msg = "Identifiant ou mot de passe incorrct";
       }
@@ -76,7 +80,7 @@ if(isset($_POST['submitButton'])) {
 				<?php echo '<center>'.$msg.'</center><br>'; ?>
 				</div>
 					<span class="login100-form-title p-b-26">
-						Bienvnu
+						Bienvnue
 					</span>
 					<div class="wrap-input100 validate-input">
 						<input class="input100" type="text" name="username" required>

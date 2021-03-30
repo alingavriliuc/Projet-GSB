@@ -3,9 +3,11 @@ session_start();
 require("db.php"); 
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
+require("controll_saisie.php");
+
 ?>
 <?php
-if(isset($_POST['ajout_fiche_frais_btn'])){require("controll_saisie.php");$_SESSION['activeRadio'] = 3;}
+if(isset($_POST['ajout_fiche_frais_btn'])){$_SESSION['activeRadio'] = 3;}
 if(isset($_POST['saisie_date_fiche_frais'])){ $_SESSION['saisie_date_fiche_frais'] = $_POST['saisie_date_fiche_frais'];}
 if(isset($_POST['saisie_qte_etp'])){ $_SESSION['saisie_qte_etp'] = $_POST['saisie_qte_etp']; }
 if(isset($_POST['saisie_nb_km'])){ $_SESSION['saisie_nb_km'] = $_POST['saisie_nb_km']; }
@@ -30,9 +32,9 @@ if(isset($_POST["affiche_fiche_frais"])){
   $fraisKM = 0;
   $fraisNuite = 0;
   $fraisRepas = 0;
-  
-  $nbJustificatifs =0;
-  $etatFicheFrais =0;
+  $nbJustificatifs = 0;
+  $etatFicheFrais = 0;
+  $montantHorsForfait = 0;
 
 
   $query_frais_etape = "select (prix*qte) as somme from ligne_frais_forfait join forfait on forfaitID = forfait.id join users on userid = users.id where forfait.id=:fraisid and userid=:userid and date=:date";
@@ -42,6 +44,8 @@ if(isset($_POST["affiche_fiche_frais"])){
 
   $query_nb_justificatifs = "select nbJustificatifs from fiche_frais where userid=:userid and date=:date";
   $query_etat_ffrais = "select idEtat from fiche_frais where userid=:userid and date=:date";
+
+  $query_montant_hors_forfait = "select montant from ligne_frais_hors_forfait where userID=:userid and date=:date";
 
   try {
     $request = $db->prepare($query_frais_etape);
@@ -122,6 +126,36 @@ if(isset($_POST["affiche_fiche_frais"])){
     echo "Error : ".$e->getMessage();
   }
 
+  try {
+    $request = $db->prepare($query_etat_ffrais);
+    $request->bindParam('userid', $userID, PDO::PARAM_STR);
+    $request->bindParam('date', $date_fiche_frais, PDO::PARAM_STR);
+    $request->execute();
+    $res = $request->fetch(PDO::FETCH_ASSOC);
+    if(!empty($res)) {
+      $etatFicheFrais = $res['idEtat'];
+    } else {
+      $msge = "Fiche frais non trouvé ".$etpID." ".$userID." ".$date_fiche_frais;
+    }
+  } catch (PDOException $e) {
+    echo "Error : ".$e->getMessage();
+  }
+
+  try {
+    $request = $db->prepare($query_montant_hors_forfait);
+    $request->bindParam('userid', $userID, PDO::PARAM_STR);
+    $request->bindParam('date', $date_fiche_frais, PDO::PARAM_STR);
+    $request->execute();
+    $res = $request->fetch(PDO::FETCH_ASSOC);
+    if(!empty($res)) {
+      $montantHorsForfait = $res['montant'];
+    } else {
+      $msge = "Fiche frais non trouvé ".$etpID." ".$userID." ".$date_fiche_frais;
+    }
+  } catch (PDOException $e) {
+    echo "Error : ".$e->getMessage();
+  }
+
   
 }
 ?>
@@ -184,10 +218,18 @@ if(isset($_POST["affiche_fiche_frais"])){
         <tr>
           <td><?php if(isset($date_fiche_frais)){echo $date_fiche_frais;} ?></td>
           <td><?php if(isset($nbJustificatifs)){echo $nbJustificatifs;} ?></td>
-          <td><?php if(isset($fraisEtape)){echo $fraisEtape ."€ ";} ?></td>
-          <td><?php if(isset($fraisKM)){echo $fraisKM ."€ ";} ?></td>
-          <td><?php if(isset($fraisNuite)){echo $fraisNuite ."€ ";} ?></td>
-          <td><?php if(isset($fraisRepas)){echo $fraisRepas ."€ ";} ?></td>
+          <td><?php if(isset($fraisEtape)){echo $fraisEtape ."€";} ?></td>
+          <td><?php if(isset($fraisKM)){echo $fraisKM ."€";} ?></td>
+          <td><?php if(isset($fraisNuite)){echo $fraisNuite ."€";} ?></td>
+          <td><?php if(isset($fraisRepas)){echo $fraisRepas ."€";} ?></td>
+          <td><?php if(isset($montantHorsForfait)){echo $montantHorsForfait."€";} ?></td>
+          <td><?php 
+            if (isset($fraisEtape) && isset($fraisKM) && isset($fraisNuite) && isset($fraisRepas) && isset($montantHorsForfait)){
+              $varRes = $fraisEtape + $fraisKM + $fraisNuite + $fraisRepas + $montantHorsForfait;
+              echo $varRes ."€";
+            }
+          ?></td>
+          <td><?php if(isset($etatFicheFrais)){echo $etatFicheFrais;} ?></td>
         </tr>
         
       </tbody>
@@ -214,7 +256,7 @@ if(isset($_POST["affiche_fiche_frais"])){
               <input type="date" id="txtDateHF" name="saisie_date_fiche_frais" size="12" maxlength="10" required/>
             </p>
             <p>
-              <label for="qte_etp">* Qte. Etape : </label>
+              <label for="qte_etp">* Nb. Etape : </label>
               <input type="text" id="txtMontantHF" name="saisie_qte_etp" size="12" maxlength="10" required/>
             </p>
             <p>
@@ -253,7 +295,7 @@ if(isset($_POST["affiche_fiche_frais"])){
       </div>
       <div class="piedForm">
       <p>
-        <input id="ajouter" type="submit" value="Ajouter" size="20" name="ajout_fiche_frais_btn"/>
+        <input id="ajouter" type="submit" value="Ajouter" size="30" name="ajout_fiche_frais_btn"/>
       </p>
       </div>
     </form>
