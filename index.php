@@ -27,7 +27,7 @@ if(isset($_POST['submitButton'])) {
 		$_SESSION['userCP'] = $row['cp'];
 		$_SESSION['userFonction'] = $row['fonction'];
 		if(isset($_SESSION['userFonction'])){
-			if($_SESSION['userFonction'] === "visiteur"){header("Location: ./php/home.php");}else{$msg = $_SESSION['userFonction'];}
+			if($_SESSION['userFonction'] === "visiteur"){header("Location: ./php/home.php");}else{header("Location: ./php/home_compta.php");}
 		}
       } else {
         $msg = "Identifiant ou mot de passe incorrct";
