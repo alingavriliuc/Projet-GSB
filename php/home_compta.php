@@ -3,11 +3,13 @@ session_start();
 require("db.php"); 
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
-require("controll_saisie.php");
+
+$userName ="";
+$tempUserID = 0;
 
 ?>
 <?php
-if(isset($_POST['ajout_fiche_frais_btn'])){$_SESSION['activeRadio'] = 3;}
+if(isset($_POST['ajout_fiche_frais_btn'])){$_SESSION['activeRadio'] = 3;require("controll_saisie.php");}
 if(isset($_POST['saisie_date_fiche_frais'])){ $_SESSION['saisie_date_fiche_frais'] = $_POST['saisie_date_fiche_frais'];}
 if(isset($_POST['saisie_qte_etp'])){ $_SESSION['saisie_qte_etp'] = $_POST['saisie_qte_etp']; }
 if(isset($_POST['saisie_nb_km'])){ $_SESSION['saisie_nb_km'] = $_POST['saisie_nb_km']; }
@@ -203,33 +205,51 @@ if(isset($_POST["affiche_fiche_frais"])){
     <table>
       <thead>
         <tr>
+          <th>Nom </th>
           <th>Date</th>
           <th>Justificatifs</th>
-          <th>Frais etape</th>
-          <th>Frais Km</th>
-          <th>frais nuitée</th>
-          <th>Frais repas</th>
-          <th>Hors forfait</th>
-          <th>Total</th>
+          <th>Montant</th>
           <th>Etat</th>
+          <th></th>
         </tr>
       <thead>
       <tbody>
         <tr>
-          <td><?php if(isset($date_fiche_frais)){echo $date_fiche_frais;} ?></td>
-          <td><?php if(isset($nbJustificatifs)){echo $nbJustificatifs;} ?></td>
-          <td><?php if(isset($fraisEtape)){echo $fraisEtape ."€";} ?></td>
-          <td><?php if(isset($fraisKM)){echo $fraisKM ."€";} ?></td>
-          <td><?php if(isset($fraisNuite)){echo $fraisNuite ."€";} ?></td>
-          <td><?php if(isset($fraisRepas)){echo $fraisRepas ."€";} ?></td>
-          <td><?php if(isset($montantHorsForfait)){echo $montantHorsForfait."€";} ?></td>
-          <td><?php 
-            if (isset($fraisEtape) && isset($fraisKM) && isset($fraisNuite) && isset($fraisRepas) && isset($montantHorsForfait)){
-              $varRes = $fraisEtape + $fraisKM + $fraisNuite + $fraisRepas + $montantHorsForfait;
-              echo $varRes ."€";
+          <?php
+            $stmt = $db->query('Select * from fiche_frais'); 
+            //$stmt = $db->query('Select * from fiche_frais where idEtat = "CR"');
+            foreach($stmt as $row){
+            ?>
+            <tr>
+              <?php 
+                try {
+                  $request = $db->prepare('select nom from fiche_frais join users on userid=users.id where userid=:userid');
+                  $request->bindParam('userid', $row['userid'] , PDO::PARAM_STR);
+                  $request->execute();
+                  $res = $request->fetch(PDO::FETCH_ASSOC);
+                  if(!empty($res)) {
+                    $userName = $res['nom'];
+                  } else {
+                    $msge = "Fiche frais non trouvé ".$etpID." ".$userID." ".$date_fiche_frais;
+                  }
+                } catch (PDOException $e) {
+                  echo "Error : ".$e->getMessage();
+                }
+              ?>
+              <td><?php echo $userName; ?></td>
+              <td><?php echo $row['date']; ?></td>
+              <td><?php echo $row['nbJustificatifs']; ?></td>
+              <td><?php echo $row['montantValide']; ?></td>
+              <td><?php echo $row['idEtat']; ?></td>
+              <?php 
+                if($row['idEtat'] == "CR"){
+                  echo '<form method="post"><td><input type="submit" name="valder_fiche" value="valider cette fiche"></td></form>';
+                }
+              ?>
+            </tr>
+            <?php
             }
-          ?></td>
-          <td><?php if(isset($etatFicheFrais)){echo $etatFicheFrais;} ?></td>
+          ?>
         </tr>
         
       </tbody>

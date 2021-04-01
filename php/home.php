@@ -3,11 +3,11 @@ session_start();
 require("db.php"); 
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
-require("controll_saisie.php");
+
 
 ?>
 <?php
-if(isset($_POST['ajout_fiche_frais_btn'])){$_SESSION['activeRadio'] = 3;}
+if(isset($_POST['ajout_fiche_frais_btn'])){$_SESSION['activeRadio'] = 3;require("controll_saisie.php");}
 if(isset($_POST['saisie_date_fiche_frais'])){ $_SESSION['saisie_date_fiche_frais'] = $_POST['saisie_date_fiche_frais'];}
 if(isset($_POST['saisie_qte_etp'])){ $_SESSION['saisie_qte_etp'] = $_POST['saisie_qte_etp']; }
 if(isset($_POST['saisie_nb_km'])){ $_SESSION['saisie_nb_km'] = $_POST['saisie_nb_km']; }
