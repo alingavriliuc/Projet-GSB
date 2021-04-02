@@ -168,7 +168,7 @@ if(isset($_POST["affiche_fiche_frais"])){
   <meta charset="UTF-8">
   <title>GSB</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel="stylesheet" href="../css/homestyle.css">
+  <link rel="stylesheet" href="../css/homestyle_compta.css">
 
 </head>
 <body>
@@ -260,71 +260,6 @@ if(isset($_POST["affiche_fiche_frais"])){
     <span>Consulter</span>
     </label>
 
-  <input name="nav" type="radio" class="saisir-radio" id="saisir" <?php if($_SESSION['activeRadio'] == 3){echo "checked";} ?> />
-  <div class="page saisir-page">
-    <div class="page-contents">
-    
-    <form action="" method="post">
-    <?php if(isset($_SESSION['msg_saiie'])){echo $_SESSION['msg_saiie']."<br><br><br>";}?>
-    <div class="corpsForm">
-          <input type="hidden" name="etape" value="validerAjoutLigneHF" />
-          <fieldset>
-            <legend>Nouvelle fiche
-            </legend>
-            <p>
-              <label for="date_date">* Date : </label>
-              <input type="date" id="txtDateHF" name="saisie_date_fiche_frais" size="12" maxlength="10" required/>
-            </p>
-            <p>
-              <label for="qte_etp">* Nb. Etape : </label>
-              <input type="text" id="txtMontantHF" name="saisie_qte_etp" size="12" maxlength="10" required/>
-            </p>
-            <p>
-              <label for="qte_km">* Nb. KM : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_km" size="12" maxlength="10" required/>
-            </p>
-            <p>
-              <label for="qte_nui">* Nb. Nuits : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_nui" size="12" maxlength="10"required/>
-            </p>
-            <p>
-              <label for="qte_rep">* Nb. Repas : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_repas" size="12" maxlength="10"required/>
-            </p>
-            <p>
-              <label for="qte_rep">Nb. Justificatifs : </label>
-              <input type="text" id="txtMontantHF" name="saisie_nb_justificatifs" size="12" maxlength="10" required/>
-            </p>
-          </fieldset>
-      </div>
-     <br>
-      <div class="corpsForm">
-          <input type="hidden" name="etape" value="validerAjoutLigneHF" />
-          <fieldset>
-            <legend>Nouvel élément hors forfait
-            </legend>
-            <p>
-              <label for="txtLibelleHF">Libellé : </label>
-              <input type="text" id="txtLibelleHF" name="saisie_libelle_txt" size="70" maxlength="100"/>
-            </p>
-            <p>
-              <label for="txtMontantHF">Montant : </label>
-              <input type="text" id="txtMontantHF" name="saisie_montant" size="12" maxlength="10"/>
-            </p>
-          </fieldset>
-      </div>
-      <div class="piedForm">
-      <p>
-        <input id="ajouter" type="submit" value="Ajouter" size="30" name="ajout_fiche_frais_btn"/>
-      </p>
-      </div>
-    </form>
-
-    </div>
-  </div>
-  <label class="nav" for="saisir">
-    <span>Saisir</span>
-  </label>
 
   <input name="nav" type="radio" class="logout-radio" id="logout" onclick="location.href='logout.php'"/>
   <label class="nav" for="logout" id="logout">
