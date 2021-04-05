@@ -2,7 +2,6 @@
 session_start();
 require("db.php"); 
 $_SESSION['activeRadio'] = 1;
-$userID = $_SESSION['userID'];
 
 $userName ="";
 $tempUserID = 0;
@@ -78,15 +77,16 @@ $tempUserID = 0;
                   echo "Error : ".$e->getMessage();
                 }
               ?>
-              <td><?php echo $userName; ?></td>
+              <td><?php echo $row['userid']; ?></td>
               <td><?php echo $row['date']; ?></td>
               <td><?php echo $row['nbJustificatifs']; ?></td>
               <td><?php echo $row['montantValide']. "€"; ?></td>
               <td><?php echo $row['idEtat']; ?></td>
               <?php 
-                if($row['idEtat'] == "CR"){
-                  echo '<form method="post"><td><input type="submit" name="valder_fiche" value="valider cette fiche"></td></form>';
-                }
+                if($row['idEtat'] == "CR"){?>
+                 <td><a href="update.php?userid=<?=$row['userid']?>&date=<?=$row['date']?>">Valider</a>
+                 </td>
+                  <?php }
               ?>
             </tr>
             <?php
@@ -105,7 +105,7 @@ $tempUserID = 0;
 
   <input name="nav" type="radio" class="logout-radio" id="logout" onclick="location.href='logout.php'"/>
   <label class="nav" for="logout" id="logout">
-    <span><img src="/images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
+    <span><img src="images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
   </label>
 
 
