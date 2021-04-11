@@ -10,14 +10,13 @@ if(isset($_POST['submitButton'])) {
   $user_visiteur = "visiteur";
   if($username != "" && $password != "") {
     try {
-      $query = "select * from users where username=:username and password=:password";
+      $query = "select * from users where username=:username";
       $stmt = $db->prepare($query);
       $stmt->bindParam('username', $username, PDO::PARAM_STR);
-      $stmt->bindValue('password', $password, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-      if($count == 1 && !empty($row)) {
+      if(password_verify($password, $row['password'])) {
 		$_SESSION['userID'] = $row['id'];
         $_SESSION['username'] = $row['username'];
 		$_SESSION['userEmail'] = $row['email'];
@@ -77,7 +76,14 @@ if(isset($_POST['submitButton'])) {
 			<div class="wrap-login100">
 				<form class="login100-form validate-form" method="post" id="loginForm">
 				<div style="color:red;text-align:center;">
-				<?php echo '<center>'.$msg.'</center><br>'; ?>
+				<?php echo '<center>'.$msg.'</center><br>';?>
+				</div>
+				<div style="color:green;text-align:center;">
+					<?php 
+					if(isset($_SESSION['msg_reg'])){
+						echo '<center>'.$_SESSION['msg_reg'].'</center><br>';
+					   } 
+					?>
 				</div>
 					<span class="login100-form-title p-b-26">
 						Bienvnue
@@ -102,7 +108,7 @@ if(isset($_POST['submitButton'])) {
 					</div>
 
 					<div class="text-center p-t-115">
-						<a class="txt2" href="#">
+						<a class="txt2" href="php/inscription.php">
 							Créer un nouveau compte ?
 						</a>
 					</div>
