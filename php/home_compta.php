@@ -2,6 +2,7 @@
 session_start();
 require("db.php"); 
 $_SESSION['activeRadio'] = 1;
+$_SESSION['msg_reg'] ="";
 
 $userName ="";
 $tempUserID = 0;
@@ -105,7 +106,7 @@ $tempUserID = 0;
 
   <input name="nav" type="radio" class="logout-radio" id="logout" onclick="location.href='logout.php'"/>
   <label class="nav" for="logout" id="logout">
-    <span><img src="images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
+    <span><img src="../images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
   </label>
 
 

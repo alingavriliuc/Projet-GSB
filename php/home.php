@@ -4,6 +4,7 @@ require("db.php");
 $_SESSION['activeRadio'] = 1;
 $userID = $_SESSION['userID'];
 require("controll_saisie.php");
+$_SESSION['msg_reg'] ="";
 
 ?>
 <?php
@@ -308,7 +309,7 @@ if(isset($_POST["affiche_fiche_frais"])){
 
   <input name="nav" type="radio" class="logout-radio" id="logout" onclick="location.href='logout.php'"/>
   <label class="nav" for="logout" id="logout">
-    <span><img src="/images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
+    <span><img src="../images/logout.png" alt="logout" style="height:20px; width:20px; opacity:0.8;"></span>
   </label>
 
 

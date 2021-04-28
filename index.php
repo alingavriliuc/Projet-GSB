@@ -1,6 +1,9 @@
 <?php 
 session_start();
 require("./php/db.php");
+
+$_SESSION['reset_succes'] = "";
+$_SESSION['resetPSW_msg'] = "";
 ?>
 <?php
 $msg = ""; 
@@ -110,6 +113,10 @@ if(isset($_POST['submitButton'])) {
 					<div class="text-center p-t-115">
 						<a class="txt2" href="php/inscription.php">
 							Créer un nouveau compte ?
+						</a>
+						<br>
+						<a class="txt2" href="pas_restore/restauration.php">
+							Mot de passe oublié ?
 						</a>
 					</div>
 				</form>
